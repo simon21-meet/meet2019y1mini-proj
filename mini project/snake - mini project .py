@@ -1,4 +1,5 @@
 
+
 import turtle
 import random #We'll need this later in the lab
 
@@ -56,13 +57,31 @@ for i  in range (START_LENGTH) :
     #function to do this
     new_stamp()
 
+turtle.listen()
 
 snake.direction = "Up"
+turtle.register_shape("apple2.gif") #Add trash picture
+food = turtle.clone()
+food.shape("apple2.gif") 
+
+#Locations of food
+food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
+food_stamps = []
+
+
+for this_food_pos in food_pos :
+    food.goto(this_food_pos)
+    food_stamps.append(food.stamp())
+    turtle.hideturtle
+    
+  
 
 UP_EDGE=250
 DOWN_EDGE=-250
 RIGHT_EDGE=400
 LEFT_EDGE=-400
+
+
 
 def remove_tail():
     old_stamp = stamp_list.pop(0) # last piece of tail
@@ -73,25 +92,25 @@ def up():
     snake.direction="Up" #Change direction to up
     print("You pressed the up key!")
 turtle.onkeypress(up, "Up") # Create listener for up key
-turtle.listen()
+
           
 def down():
     snake.direction="Down"
     print("You pressed the down key!")
 turtle.onkeypress(down, "Down")
-turtle.listen()
+
 
 def left():
     snake.direction= "Left"
     print("You pressed the left key!")
 turtle.onkeypress(left, "Left")
-turtle.listen()
+
 
 def right():
     snake.direction="Right"
     print("You pressed the right key")
 turtle.onkeypress(right, "Right")
-turtle.listen()
+
   
 
 def move_snake():
@@ -130,17 +149,28 @@ def move_snake():
     elif new_y_pos<=DOWN_EDGE:
         print("You hit the bottom edge! Game over")
         quit()
+        
           
    #Make the snake stamp a new square on the screen
     #Hint - use a single function to do this
     new_stamp()
 
-    ######## SPECIAL PLACE - Remember it for Part 5
+ 
 
     #remove the last piece of the snake (Hint Functions are FUN!)
     remove_tail()
 
+    if snake.pos() in food_pos:
+        food_index=food_pos.index(snake.pos()) #What does this do?
+        food.clearstamp(food_stamps[food_index]) #Remove eaten food stamp
+        food_pos.pop(food_index) #Remove eaten food position
+        food_stamps.pop(food_index) #Remove eaten food stamp
+        print("You have eaten the food!")
+
+
     turtle.ontimer(move_snake,TIME_STEP)
+move_snake()
+
 
 
 turtle.mainloop()
