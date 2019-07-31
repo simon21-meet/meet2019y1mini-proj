@@ -1,9 +1,7 @@
-
-
 import turtle
 import random #We'll need this later in the lab
 
-turtle.tracer(100,0) #This helps the turtle move more smoothly
+turtle.tracer(1,0) #This helps the turtle move more smoothly
 
 SIZE_X=800
 SIZE_Y=500
@@ -14,6 +12,7 @@ turtle.penup()
 SQUARE_SIZE = 20
 START_LENGTH =6
 TIME_STEP = 100
+
 
 #Initialize lists
 pos_list = []
@@ -65,11 +64,11 @@ food = turtle.clone()
 food.shape("apple2.gif") 
 
 #Locations of food
-food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
+food_pos = []
 food_stamps = []
 
 
-for this_food_pos in food_pos :
+for this_food_pos in food_pos:
     food.goto(this_food_pos)
     food_stamps.append(food.stamp())
     turtle.hideturtle
@@ -111,7 +110,27 @@ def right():
     print("You pressed the right key")
 turtle.onkeypress(right, "Right")
 
+
+def make_food():
+    #The screen positions go from -SIZE/2 to +SIZE/2
+    #But we need to make food pieces only appear on game squares
+    #So we cut up the game board into multiples of SQUARE_SIZE.
+    min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
+    max_x=int(SIZE_X/2/SQUARE_SIZE)-1
+    min_y=-int(SIZE_Y/2/SQUARE_SIZE)+1
+    max_y=int(SIZE_Y/2/SQUARE_SIZE)-1
+    
+    #Pick a position that is a random multiple of SQUARE_SIZE
+    food_x = random.randint(min_x,max_x)*SQUARE_SIZE
+    food_y = random.randint(min_y,max_y)*SQUARE_SIZE
+
+    food.goto(food_x, food_y)
+    food_pos.append(food.pos())
+    foodid=food.stamp()
+    food_stamps.append(foodid)
+    
   
+snake.Points_list = 0
 
 def move_snake():
     my_pos = snake.pos()
@@ -155,23 +174,28 @@ def move_snake():
     #Hint - use a single function to do this
     new_stamp()
 
- 
-
-    #remove the last piece of the snake (Hint Functions are FUN!)
-    remove_tail()
-
     if snake.pos() in food_pos:
         food_index=food_pos.index(snake.pos()) #What does this do?
         food.clearstamp(food_stamps[food_index]) #Remove eaten food stamp
         food_pos.pop(food_index) #Remove eaten food position
         food_stamps.pop(food_index) #Remove eaten food stamp
         print("You have eaten the food!")
+        snake.Points_list+=1
+        print("You have " + str(snake.Points_list) + " points!")
+    else:
+        remove_tail()   
+    
 
+    if len(food_stamps)<1:
+        make_food()
 
     turtle.ontimer(move_snake,TIME_STEP)
+
+    if snake.pos() in pos_list[:-1]:
+        quit()
+    
 move_snake()
 
-
-
+    
 turtle.mainloop()
 
