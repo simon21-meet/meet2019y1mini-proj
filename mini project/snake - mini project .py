@@ -59,7 +59,7 @@ for i  in range (START_LENGTH) :
     #function to do this
     new_stamp()
 
-turtle.listen()
+
 
 snake.direction = "Up"
 turtle.register_shape("apple2.gif") #Add trash picture
@@ -134,6 +134,8 @@ def make_food():
     
   
 snake.Points_list = 0
+turtle.goto(-380,-230)
+
 
 def move_snake():
     my_pos = snake.pos()
@@ -184,7 +186,8 @@ def move_snake():
         food_stamps.pop(food_index) #Remove eaten food stamp
         print("You have eaten the food!")
         snake.Points_list+=1
-        turtle.write("You have " + str(snake.Points_list) + " points!", font="arial", align= 'center')
+        turtle.clear()
+        turtle.write("You have " + str(snake.Points_list) + " points!", font="arial")
     else:
         remove_tail()   
     
@@ -208,8 +211,9 @@ pos_list2 = []
 stamp_list2 = []
 
 #Set up positions (x,y) of boxes that make up the snake
-snake2 = turtle.clone()
-snake2.shape("circle")
+snake2 = turtle.Turtle()
+snake2.shape("triangle")
+snake2.color("red")
 
 #Hide the turtle object (it's an arrow - we don't need to see it)
 turtle.hideturtle()
@@ -243,9 +247,8 @@ for i  in range (START_LENGTH) :
     #function to do this
     new_stamp2()
 
-turtle.listen()
 
-snake2.direction = "Up"
+snake2.direction = "w"
 
 #Locations of food
 
@@ -278,15 +281,15 @@ turtle.onkeypress(down, "s")
 
 
 def d():
-    snake2.direction= "d"
+    snake2.direction= "a"
     print("You pressed the left key!")
-turtle.onkeypress(left, "d")
+turtle.onkeypress(left, "a")
 
 
 def a():
-    snake2.direction="a"
+    snake2.direction="d"
     print("You pressed the right key")
-turtle.onkeypress(right, "a")
+turtle.onkeypress(right, "d")
 
 
 
@@ -342,7 +345,8 @@ def move_snake2():
         food_stamps2.pop(food_index2) #Remove eaten food stamp
         print("You have eaten the food!")
         snake2.Points_list+=1
-        snake2.write("You have " + str(snake.Points_list) + " points!", font="arial", align= 'center')
+        snake3.goto(-380, -230)
+        snake3.write("Hello")
     else:
         remove_tail()   
     
@@ -354,5 +358,8 @@ def move_snake2():
 
     if snake.pos2() in pos_list2[:-1]:
         quit()
+
+turtle.listen()
+
 turtle.mainloop()
 
